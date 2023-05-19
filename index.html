@@ -46,7 +46,14 @@
         });
       }
 
-      async function sendMessage(question, api, token) {
+      function sendMessage(question, api, token) {
+        var divs = document.getElementById('result').getElementsByTagName('div')
+
+        var chat_history = []
+        for (var i = 0; i < divs.length; i++) {
+          chat_history.push(divs[i].innerText)
+        }
+
         fetch(api, {
           method: 'POST',
           headers: {
@@ -60,12 +67,18 @@
           // body: '{"question": "How to develop these skills?", "chat_history": []}',
           body: JSON.stringify({
               'question': question,
-              'chat_history': []
+              'chat_history': chat_history
           })
         }).then(response => {
           response.json().then(data => {
             console.log(data[0])
-            document.getElementById('result').innerHTML += '<div>' + data[0].data.answer + '</div>'
+            var div = document.createElement('div')
+            div.innerHTML = data[0].answer
+            document.getElementById('result').appendChild(div)
+            div.classList.add('bg-gray-100', 'border-2', 'border-gray-200', 'rounded-lg', 'p-4', 'mx-16')
+
+            document.getElementById('result').appendChild(div)
+            
           })
         })
       }

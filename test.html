@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+        <div class="grid grid-rows-3 grid-cols-1
+        content-center place-content-center">
+          <div class="bg-gray-100 border-2 border-gray-200 rounded-lg p-4 mx-16">
+            <input type="text" id="token1" name="token1" value="put the token here">
+          </div>
+          <button onclick="initWS(document.getElementById('token1').value)">Init</button>
+          <div class="bg-gray-100 border-2 border-gray-200 rounded-lg p-4 mx-16">
+            <input type="text" id="endpoint" name="endpoint" value="put the link here">
+          </div>
+          <div class="bg-gray-100 border-2 border-gray-200 rounded-lg p-4 mx-16">
+            <input type="text" id="token" name="token" value="put the token here">
+
+          </div>
+          <div class="bg-gray-100 border-2 border-gray-200 rounded-lg p-4 mx-16">
+            <input type="text" id="question" name="question" value="How to develop these skills?">
+          </div>
+          <button onclick="sendMessage(document.getElementById('question').value, document.getElementById('endpoint').value, document.getElementById('token').value, )">Send</button>  
+          <div id="result"></div>
+        </div>
+    </body>
+    <script>
+      (function (w, d, s, o, f, js, fjs) {
+        w["chatsonic_widget"] = o;
+        w[o] =
+          w[o] ||
+          function () {
+            (w[o].q = w[o].q || []).push(arguments);
+          };
+        (js = d.createElement(s)), (fjs = d.getElementsByTagName(s)[0]);
+        js.id = o;
+        js.src = f;
+        js.async = 1;
+        fjs.parentNode.insertBefore(js, fjs);
+      })(window, document, "script", "ws", "https://writesonic.s3.amazonaws.com/frontend-assets/CDN/botsonic.min.js");
+
+      function initWS(token){
+        ws("init", {
+          serviceBaseUrl: "https://api.writesonic.com",
+          token: token,
+        });
+      }
+
+      async function sendMessage(question, api, token) {
+        fetch(api, {
+          method: 'POST',
+          headers: {
+              'Accept-Encoding': 'gzip, deflate',
+              'Connection': 'keep-alive',
+              'Content-Type': 'application/json',
+              'User-Agent': 'python-requests/2.28.1',
+              'accept': 'application/json',
+              'token': token
+          },
+          // body: '{"question": "How to develop these skills?", "chat_history": []}',
+          body: JSON.stringify({
+              'question': question,
+              'chat_history': []
+          })
+        }).then(response => {
+          response.json().then(data => {
+            console.log(data[0])
+            document.getElementById('result').innerHTML += '<div>' + data[0].data.answer + '</div>'
+          })
+        })
+      }
+    </script>
+          <!-- ------ There will be no api access until we upgrade subscription ------ -->
+
+          <!-- --- Also a thing to note is that all of the chat results has to be ---- -->
+          <!-- ------------- stored in database instead of client side, -------------- -->
+            <!-- -------- or a server function to communicate to bot sonic api --------- -->
+
+          <!-- ---- meaning that communication to bot sonic must not be from frontend but only from backend server ---- -->
+          <!-- ------ as the api key can be intercepted and compromised ------- -->
+</html>

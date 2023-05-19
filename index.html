@@ -38,9 +38,10 @@
         js.src = f;
         js.async = 1;
         fjs.parentNode.insertBefore(js, fjs);
-      })(window, document, "script", "ws", "https://writesonic.s3.amazonaws.com/frontend-assets/CDN/botsonic.min.js");
+      })
 
       function initWS(token){
+        (window, document, "script", "ws", "https://writesonic.s3.amazonaws.com/frontend-assets/CDN/botsonic.min.js");
         ws("init", {
           serviceBaseUrl: "https://api.writesonic.com",
           token: token,

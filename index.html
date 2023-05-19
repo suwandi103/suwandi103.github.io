@@ -54,6 +54,8 @@
           chat_history.push(divs[i].innerText)
         }
 
+        console.log("Chat history: " + chat_history)
+
         fetch(api, {
           method: 'POST',
           headers: {
@@ -76,9 +78,7 @@
             div.innerHTML = data[0].data.answer
             document.getElementById('result').appendChild(div)
             div.classList.add('bg-gray-100', 'border-2', 'border-gray-200', 'rounded-lg', 'p-4', 'mx-16')
-
             document.getElementById('result').appendChild(div)
-            
           })
         })
       }

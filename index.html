@@ -26,6 +26,7 @@
         </div>
     </body>
     <script>
+      var chat_history = [];
       function initWS(token){
         (function (w, d, s, o, f, js, fjs) {
           w["chatsonic_widget"] = o;
@@ -47,15 +48,6 @@
       }
 
       function sendMessage(question, api, token) {
-        var divs = document.getElementById('result').getElementsByTagName('div')
-
-        var chat_history = []
-        for (var i = 0; i < divs.length; i++) {
-          chat_history.push(divs[i].innerText)
-        }
-
-        console.log("Chat history: " + chat_history)
-
         fetch(api, {
           method: 'POST',
           headers: {
@@ -74,10 +66,13 @@
         }).then(response => {
           response.json().then(data => {
             console.log(data[0])
+
+            chat_history = data[0].data.chat_history
+
             var div = document.createElement('div')
             div.innerHTML = data[0].data.answer
-            document.getElementById('result').appendChild(div)
             div.classList.add('bg-gray-100', 'border-2', 'border-gray-200', 'rounded-lg', 'p-4', 'mx-16')
+            div.id = 'answer'
             document.getElementById('result').appendChild(div)
           })
         })
